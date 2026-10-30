@@ -65,14 +65,27 @@ Custom macros in `macros/`:
 
 Model, column, and source descriptions are maintained alongside the models in `models/staging/schema.yml`, `models/dwh/schema.yml`, and `models/staging/source.yml`.
 
-Generate and preview the dbt documentation site locally:
+The generated site is checked in under `docs/`. To publish it, enable **Settings → Pages → Build and deployment → Source: GitHub Actions** in the repository. The workflow at `.github/workflows/deploy-docs.yml` deploys the static site. After its first successful run, the documentation will be available at:
+
+<https://mohab065-del.github.io/employee-analytics-dbt-/>
+
+To preview the docs locally:
 
 ```bash
 dbt docs generate
 dbt docs serve
 ```
 
-The local preview is not a public URL. To share the documentation, publish the generated `target/` documentation files to a hosting service such as GitHub Pages, then add the public URL here.
+To refresh the published snapshot after changing models or descriptions, regenerate the docs and copy the generated site files into `docs/` from PowerShell:
+
+```powershell
+dbt docs generate
+New-Item -ItemType Directory -Force docs | Out-Null
+Copy-Item target\index.html,target\manifest.json,target\catalog.json -Destination docs
+git add docs
+git commit -m "Refresh dbt documentation"
+git push
+```
 
 ## Project layout
 
@@ -83,4 +96,5 @@ models/
 macros/      # Reusable SQL/Jinja macros
 tests/       # Singular data tests
 seeds/       # Project seed data
+docs/        # Generated dbt Docs site for GitHub Pages
 ```
