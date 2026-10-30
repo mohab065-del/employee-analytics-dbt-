@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: fact_employee
+    description: "Employee fact table with foreign keys to the staged dimensions and employee salary."
+    columns:
+      - name: employee_id
+        description: "Employee identifier; also links to the employee dimension."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('DIMemployee')
+                field: employee_id
+      - name: country_id
+        description: "Foreign key to the country dimension."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('DIMcountry')
+                field: country_id
+      - name: department_id
+        description: "Foreign key to the department dimension."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('DIMdepartment')
+                field: department_id
+      - name: gender_id
+        description: "Foreign key to the gender dimension."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('DIMgender')
+                field: gender_id
+      - name: date_key
+        description: "Foreign key to the date dimension, based on employee date of birth."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('DIMdate')
+                field: date_key
+      - name: salary
+        description: "Employee salary as a decimal amount."

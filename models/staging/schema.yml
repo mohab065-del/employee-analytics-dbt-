@@ -1,0 +1,98 @@
+version: 2
+
+models:
+  - name: DIMdepartment
+    description: "Distinct departments from the ODS source with generated department identifiers."
+    config:
+      materialized: table
+    columns:
+      - name: department_id
+        description: "Generated identifier for a department."
+        data_tests:
+          - unique
+          - not_null
+      - name: department
+        description: "Department name from the source employee records."
+        data_tests:
+          - not_null
+
+  - name: DIMemployee
+    description: "Employee records with a generated full name and source employee identifier."
+    columns:
+      - name: employee_id
+        description: "Employee identifier from the ODS source."
+        data_tests:
+          - unique
+          - not_null
+      - name: full_name
+        description: "Trimmed first and last names with initial capitalization."
+        data_tests:
+          - not_null
+      - name: email
+        description: "Employee email address."
+        data_tests:
+          - not_null
+          - unique
+  - name: DIMdate
+    description: "Distinct employee birth dates and their calendar attributes."
+    columns:
+      - name: date_key
+        description: "Integer date key in YYYYMMDD format."
+        tests:
+          - unique
+          - not_null
+      - name: date
+        description: "Employee date of birth."
+        tests:
+          - not_null
+      - name: month
+        description: "Numeric month of the birth date."
+        tests:
+          - not_null
+      - name: year
+        description: "Year of the birth date."
+        tests:
+          - not_null
+      - name: Day
+        description: "Day of the month for the birth date."
+        tests:
+          - not_null
+      - name: month_name
+        description: "Localized month name for the birth date."
+        tests:
+          - not_null
+      - name: day_name
+        description: "Localized weekday name for the birth date."
+        tests:
+          - not_null
+
+  - name: DIMgender
+    description: "Distinct gender values from the ODS source with generated identifiers."
+    columns:
+      - name: gender_id
+        description: "Generated identifier for a gender value."
+        tests:
+          - unique
+          - not_null
+      - name: gender
+        description: "Gender value from the source employee records."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Male', 'Female']
+  - name: DIMcountry
+    description: "Distinct countries from the ODS source with generated country identifiers."
+    columns:
+      - name: country_id
+        description: "Generated identifier for a country."
+        tests:
+          - unique
+          - not_null
+      - name: country
+        description: "Country value from the source employee records."
+        tests:
+          - not_null
+
+  - name: OBT
+    description: "Employee-level staging table combining names, contact details, demographics, organization, salary, and birth date."

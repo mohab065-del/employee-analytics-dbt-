@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: source_ods
+    description: "Operational data store used as the source for employee analytics."
+    database: "ODS"
+    schema: "dbo"
+    tables:
+      - name: ODS
+        description: "Employee records including personal, organizational, salary, and date-of-birth attributes."
